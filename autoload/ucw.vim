@@ -49,9 +49,9 @@ endfunction "}}}
 
 
 
-function! ucw#add_history(...) "{{{
+function! ucw#add_history(type, ...) "{{{
     let [bufname, bufnr] = s:args(a:000, expand('%'), bufnr('%'))
-    call s:ucw.add_history(bufname, bufnr)
+    call s:ucw.add_history(a:type, bufname, bufnr)
 endfunction "}}}
 
 function! ucw#restore_window(n) "{{{
@@ -68,22 +68,33 @@ let s:ucw = {}
 " If g:ucw_save_num is greater than N,
 " Use dict whose key is bufnr.
 let s:ucw.histories = []
-let s:HISTORY_BUFNAME = 0
-let s:HISTORY_BUFNR = 1
-lockvar s:HISTORY_BUFNAME s:HISTORY_BUFNR
+let s:HISTORY_TYPE = 0
+let s:HISTORY_BUFNAME = 1
+let s:HISTORY_BUFNR = 2
+lockvar s:HISTORY_TYPE s:HISTORY_BUFNAME s:HISTORY_BUFNR
 
 
+
+function! s:ucw.get_nth_type(n) dict "{{{
+    return get(self.histories, a:n, [-1, -1, -1])[s:HISTORY_TYPE]
+endfunction "}}}
 
 function! s:ucw.get_nth_bufname(n) dict "{{{
-    return get(self.histories, a:n, [-1, -1])[s:HISTORY_BUFNAME]
+    return get(self.histories, a:n, [-1, -1, -1])[s:HISTORY_BUFNAME]
 endfunction "}}}
 
 function! s:ucw.get_nth_bufnr(n) dict "{{{
-    return get(self.histories, a:n, [-1, -1])[s:HISTORY_BUFNR]
+    return get(self.histories, a:n, [-1, -1, -1])[s:HISTORY_BUFNR]
 endfunction "}}}
 
 
-function! s:ucw.add_history(bufname, bufnr) dict "{{{
+function! s:ucw.add_history(type, bufname, bufnr) dict "{{{
+    if !self.is_valid_type(a:type)
+        echohl WarningMsg
+        echomsg 'undoclosewin:' a:type 'is not valid type.'
+        echohl None
+        return
+    endif
     if g:ucw_ignore_unnamed_buffer && a:bufname == ''
         return
     endif
@@ -91,7 +102,7 @@ function! s:ucw.add_history(bufname, bufnr) dict "{{{
         return
     endif
     if !g:ucw_ignore_dup_buffer || g:ucw_ignore_dup_buffer && !self.has_buffer(a:bufnr)
-        call add(self.histories, [a:bufname, a:bufnr])
+        call add(self.histories, [a:type, a:bufname, a:bufnr])
     endif
 
     " Delete old histories.
@@ -101,6 +112,11 @@ function! s:ucw.add_history(bufname, bufnr) dict "{{{
             call remove(self.histories, 0)
         endwhile
     endif
+endfunction "}}}
+
+function! s:ucw.is_valid_type(type) "{{{
+    return a:type ==# 'window'
+    \   || a:type ==# 'tab'
 endfunction "}}}
 
 function! s:ucw.has_buffer(bufnr) dict "{{{

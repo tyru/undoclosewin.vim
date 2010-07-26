@@ -56,7 +56,7 @@ endif
 if !g:ucw_no_default_autocmd
     augroup ucw
         autocmd!
-        autocmd BufWinLeave * call ucw#add_history()
+        autocmd BufWinLeave * call ucw#add_history('window')
     augroup END
 endif
 " }}}
