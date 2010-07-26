@@ -50,8 +50,8 @@ endfunction "}}}
 
 
 function! ucw#add_history(...) "{{{
-    let [bufname, bufnr, winnr] = s:args(a:000, expand('%'), bufnr('%'), winnr())
-    call s:ucw.add_history(bufname, bufnr, winnr)
+    let [bufname, bufnr] = s:args(a:000, expand('%'), bufnr('%'))
+    call s:ucw.add_history(bufname, bufnr)
 endfunction "}}}
 
 function! ucw#restore_window(n) "{{{
@@ -71,8 +71,7 @@ let u = s:ucw    " for easily access
 let u.histories = []
 let s:HISTORY_BUFNAME = 0
 let s:HISTORY_BUFNR = 1
-let s:HISTORY_WINNR = 2
-lockvar s:HISTORY_BUFNAME s:HISTORY_WINNR s:HISTORY_BUFNR
+lockvar s:HISTORY_BUFNAME s:HISTORY_BUFNR
 
 
 
@@ -84,12 +83,8 @@ function! u.get_nth_bufnr(n) dict "{{{
     return get(self.histories, a:n, [-1, -1])[s:HISTORY_BUFNR]
 endfunction "}}}
 
-function! u.get_nth_winnr(n) dict "{{{
-    return get(self.histories, a:n, [-1, -1])[s:HISTORY_WINNR]
-endfunction "}}}
 
-
-function! u.add_history(bufname, bufnr, winnr) dict "{{{
+function! u.add_history(bufname, bufnr) dict "{{{
     if g:ucw_ignore_unnamed_buffer && a:bufname == ''
         return
     endif
@@ -97,7 +92,7 @@ function! u.add_history(bufname, bufnr, winnr) dict "{{{
         return
     endif
     if !g:ucw_ignore_dup_buffer || g:ucw_ignore_dup_buffer && !self.has_buffer(a:bufnr)
-        call add(self.histories, [a:bufname, a:bufnr, a:winnr])
+        call add(self.histories, [a:bufname, a:bufnr])
     endif
 
     " Delete old histories.
