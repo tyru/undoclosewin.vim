@@ -136,10 +136,14 @@ endfunction "}}}
 
 
 function! s:ucw.restore_window(n) dict "{{{
+    if !s:ucw.has_nth_info(a:n)
+        return
+    endif
+
     let bufnr = s:ucw.get_nth_bufnr(a:n)
     let type  = s:ucw.get_nth_type(a:n)
 
-    if bufnr ==# -1 || !bufexists(bufnr)
+    if !bufexists(bufnr)
         return
     endif
 
@@ -157,6 +161,10 @@ function! s:ucw.restore_window(n) dict "{{{
     endtry
 
     call s:ucw.remove_nth_history(a:n)
+endfunction "}}}
+
+function! s:ucw.has_nth_info(n) dict "{{{
+    return s:has_idx(self.histories, a:n)
 endfunction "}}}
 
 
