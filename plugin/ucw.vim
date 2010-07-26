@@ -46,7 +46,7 @@ endif
 " Save info to `ucw.histories`. {{{
 augroup ucw
     autocmd!
-    autocmd BufWinLeave * call ucw#add_history(expand('%'), bufnr('%'), winnr())
+    autocmd BufWinLeave * call ucw#add_history()
 augroup END
 " }}}
 

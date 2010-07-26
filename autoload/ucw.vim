@@ -13,6 +13,34 @@ set cpo&vim
 " }}}
 
 
+" Utilities {{{
+
+function! s:has_idx(list, idx) "{{{
+    let idx = a:idx
+    return 0 <= idx && idx < len(a:list)
+endfunction "}}}
+
+function! s:args(args, ...) "{{{
+    let ret_args = []
+    let i = 0
+
+    while i < len(a:000)
+        call add(
+        \   ret_args,
+        \   s:has_idx(a:args, i) ?
+        \       a:args[i]
+        \       : a:000[i]
+        \)
+        let i += 1
+    endwhile
+
+    return ret_args
+endfunction "}}}
+
+" }}}
+
+
+
 " Interface {{{
 
 function! ucw#load() "{{{
@@ -21,8 +49,9 @@ endfunction "}}}
 
 
 
-function! ucw#add_history(bufname, bufnr, winnr) "{{{
-    call s:ucw.add_history(a:bufname, a:bufnr, a:winnr)
+function! ucw#add_history(...) "{{{
+    let [bufname, bufnr, winnr] = s:args(a:000, expand('%'), bufnr('%'), winnr())
+    call s:ucw.add_history(bufname, bufnr, winnr)
 endfunction "}}}
 
 function! ucw#restore_window(n) "{{{
