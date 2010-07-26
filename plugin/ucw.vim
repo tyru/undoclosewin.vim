@@ -31,6 +31,9 @@ endif
 if !exists('g:ucw_no_default_keymappings')
     let g:ucw_no_default_keymappings = 0
 endif
+if !exists('g:ucw_no_default_autocmd')
+    let g:ucw_no_default_autocmd = 0
+endif
 
 
 if !g:ucw_no_default_commands
@@ -47,10 +50,12 @@ endif
 
 
 " Save info to `ucw.histories`. {{{
-augroup ucw
-    autocmd!
-    autocmd BufWinLeave * call ucw#add_history()
-augroup END
+if !g:ucw_no_default_autocmd
+    augroup ucw
+        autocmd!
+        autocmd BufWinLeave * call ucw#add_history()
+    augroup END
+endif
 " }}}
 
 
