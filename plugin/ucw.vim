@@ -16,8 +16,8 @@ set cpo&vim
 if !exists('g:ucw_save_num')
     let g:ucw_save_num = 10
 endif
-if !exists('g:ucw_restore_open_command')
-    let g:ucw_restore_open_command = 'split'
+if !exists('g:ucw_restore_commands')
+    let g:ucw_restore_commands = {'window': 'split', 'tab': 'tabedit'}
 endif
 if !exists('g:ucw_ignore_dup_buffer')
     let g:ucw_ignore_dup_buffer = 1

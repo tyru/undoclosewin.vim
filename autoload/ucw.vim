@@ -135,11 +135,17 @@ endfunction "}}}
 
 function! s:ucw.restore_window(n) dict "{{{
     let bufnr = s:ucw.get_nth_bufnr(a:n)
+    let type  = s:ucw.get_nth_type(a:n)
+
     if bufnr ==# -1 || !bufexists(bufnr)
         return
     endif
 
-    execute g:ucw_restore_open_command
+    if !has_key(g:ucw_restore_commands, type)
+        return
+    endif
+    execute g:ucw_restore_commands[type]
+
     " Ignore own BufWinLeave event.
     set eventignore=BufWinLeave
     try
