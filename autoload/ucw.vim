@@ -91,9 +91,15 @@ function! u.restore_window(n) dict "{{{
     endif
 
     " Open bufnr at most belowright window.
-    execute winnr('$') 'wincmd w'
-    belowright new
-    execute bufnr 'buffer'
+    noautocmd execute winnr('$') 'wincmd w'
+    noautocmd belowright split
+    " Ignore own BufWinLeave event.
+    set eventignore=BufWinLeave
+    try
+        execute bufnr 'buffer'
+    finally
+        set eventignore=
+    endtry
 endfunction "}}}
 
 
