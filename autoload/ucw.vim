@@ -93,6 +93,9 @@ function! u.add_history(bufname, bufnr, winnr) dict "{{{
     if g:ucw_ignore_unnamed_buffer && a:bufname == ''
         return
     endif
+    if g:ucw_ignore_special_buffer && &l:buftype != ''
+        return
+    endif
     if !g:ucw_ignore_dup_buffer || g:ucw_ignore_dup_buffer && !self.has_buffer(a:bufnr)
         call add(self.histories, [a:bufname, a:bufnr, a:winnr])
     endif

@@ -22,6 +22,9 @@ endif
 if !exists('g:ucw_ignore_unnamed_buffer')
     let g:ucw_ignore_unnamed_buffer = 1
 endif
+if !exists('g:ucw_ignore_special_buffer')
+    let g:ucw_ignore_special_buffer = 1
+endif
 if !exists('g:ucw_no_default_commands')
     let g:ucw_no_default_commands = 0
 endif
