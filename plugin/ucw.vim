@@ -19,6 +19,9 @@ endif
 if !exists('g:ucw_ignore_dup_buffer')
     let g:ucw_ignore_dup_buffer = 1
 endif
+if !exists('g:ucw_ignore_unnamed_buffer')
+    let g:ucw_ignore_unnamed_buffer = 1
+endif
 if !exists('g:ucw_no_default_commands')
     let g:ucw_no_default_commands = 0
 endif
