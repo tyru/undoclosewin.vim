@@ -83,6 +83,10 @@ function! u.has_buffer(bufnr) dict "{{{
     return 0
 endfunction "}}}
 
+function! u.remove_nth_history(n) dict "{{{
+    call remove(self.histories, a:n)
+endfunction "}}}
+
 
 function! u.restore_window(n) dict "{{{
     let bufnr = s:ucw.get_nth_bufnr(a:n)
@@ -100,6 +104,8 @@ function! u.restore_window(n) dict "{{{
     finally
         set eventignore=
     endtry
+
+    call s:ucw.remove_nth_history(a:n)
 endfunction "}}}
 
 
