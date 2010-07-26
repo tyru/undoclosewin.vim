@@ -17,6 +17,8 @@ set cpo&vim
 
 function! s:has_idx(list, idx) "{{{
     let idx = a:idx
+    " Return true when negative idx.
+    let idx = idx >= 0 ? idx : len(a:list) + idx
     return 0 <= idx && idx < len(a:list)
 endfunction "}}}
 
