@@ -63,28 +63,27 @@ endfunction "}}}
 " Implementation {{{
 
 let s:ucw = {}
-let u = s:ucw    " for easily access
 
 " TODO
 " If g:ucw_save_num is greater than N,
 " Use dict whose key is bufnr.
-let u.histories = []
+let s:ucw.histories = []
 let s:HISTORY_BUFNAME = 0
 let s:HISTORY_BUFNR = 1
 lockvar s:HISTORY_BUFNAME s:HISTORY_BUFNR
 
 
 
-function! u.get_nth_bufname(n) dict "{{{
+function! s:ucw.get_nth_bufname(n) dict "{{{
     return get(self.histories, a:n, [-1, -1])[s:HISTORY_BUFNAME]
 endfunction "}}}
 
-function! u.get_nth_bufnr(n) dict "{{{
+function! s:ucw.get_nth_bufnr(n) dict "{{{
     return get(self.histories, a:n, [-1, -1])[s:HISTORY_BUFNR]
 endfunction "}}}
 
 
-function! u.add_history(bufname, bufnr) dict "{{{
+function! s:ucw.add_history(bufname, bufnr) dict "{{{
     if g:ucw_ignore_unnamed_buffer && a:bufname == ''
         return
     endif
@@ -104,7 +103,7 @@ function! u.add_history(bufname, bufnr) dict "{{{
     endif
 endfunction "}}}
 
-function! u.has_buffer(bufnr) dict "{{{
+function! s:ucw.has_buffer(bufnr) dict "{{{
     for bufnr in map(copy(self.histories), 'v:val[s:HISTORY_BUFNR]')
         if bufnr ==# a:bufnr
             return 1
@@ -113,12 +112,12 @@ function! u.has_buffer(bufnr) dict "{{{
     return 0
 endfunction "}}}
 
-function! u.remove_nth_history(n) dict "{{{
+function! s:ucw.remove_nth_history(n) dict "{{{
     call remove(self.histories, a:n)
 endfunction "}}}
 
 
-function! u.restore_window(n) dict "{{{
+function! s:ucw.restore_window(n) dict "{{{
     let bufnr = s:ucw.get_nth_bufnr(a:n)
     if bufnr ==# -1 || !bufexists(bufnr)
         return
@@ -137,7 +136,6 @@ function! u.restore_window(n) dict "{{{
 endfunction "}}}
 
 
-unlet u
 lockvar 1 s:ucw
 
 " }}}
