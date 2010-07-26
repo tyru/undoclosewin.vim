@@ -57,10 +57,10 @@ if !g:ucw_no_default_autocmd
     augroup ucw
         autocmd!
 
-        autocmd TabLeave * let s:leaving_tab = [expand('%'), bufnr('%')]
+        autocmd TabLeave * let s:leaving_tab = bufnr('%')
         autocmd BufWinLeave *
         \   if exists('s:leaving_tab')
-        \   |   call ucw#add_history('tab', s:leaving_tab[0], s:leaving_tab[1])
+        \   |   call ucw#add_history('tab', s:leaving_tab)
         \   | else
         \   |   call ucw#add_history('window')
         \   | endif
