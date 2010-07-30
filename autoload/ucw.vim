@@ -60,6 +60,10 @@ function! ucw#restore_window(n) "{{{
     return s:ucw.restore_window(a:n)
 endfunction "}}}
 
+function! ucw#open_history_buffer() "{{{
+    call s:ucw.open_history_buffer()
+endfunction "}}}
+
 " }}}
 
 " Implementation {{{
@@ -73,6 +77,12 @@ let s:ucw.histories = []
 let s:HISTORY_TYPE = 0
 let s:HISTORY_BUFNR = 1
 lockvar s:HISTORY_TYPE s:HISTORY_BUFNR
+
+
+
+function! ucw#_get_instance() "{{{
+    return s:ucw
+endfunction "}}}
 
 
 
@@ -165,6 +175,41 @@ function! s:ucw.has_nth_info(n) dict "{{{
     return s:has_idx(self.histories, a:n)
 endfunction "}}}
 
+
+function! s:ucw.open_history_buffer() dict "{{{
+    try
+        execute g:ucw_history_open_command
+    catch
+        echohl ErrorMsg
+        echomsg v:exception
+        echomsg v:throwpoint
+        echohl None
+        return
+    endtry
+
+
+    let lines = []
+    for [type, bufnr] in self.histories
+        if bufexists(bufnr)
+            call add(lines, type . ': <' . bufnr . '> ' . bufname(bufnr))
+        endif
+    endfor
+    call setline(1, lines)
+    setlocal bufhidden=unload noswapfile nobuflisted nomodifiable nomodified
+
+    " TODO Update buffer list when `self.histories` are updated.
+    nnoremap <buffer> <Plug>(ucw-history-restore) :<C-u>call ucw#_get_instance().history_restore()<CR>
+    if !g:ucw_no_default_history_keymappings
+        nmap <buffer> <CR> <Plug>(ucw-history-restore)
+    endif
+
+    setfiletype ucw-history
+endfunction "}}}
+
+function! s:ucw.history_restore() dict "{{{
+    close
+    call self.restore_window(line('.') - 1)
+endfunction "}}}
 
 lockvar 1 s:ucw
 

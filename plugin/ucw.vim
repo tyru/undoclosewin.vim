@@ -19,6 +19,9 @@ endif
 if !exists('g:ucw_restore_open_commands')
     let g:ucw_restore_open_commands = {'window': 'split', 'tab': 'tabedit'}
 endif
+if !exists('g:ucw_history_open_command')
+    let g:ucw_history_open_command = 'new'
+endif
 if !exists('g:ucw_ignore_dup_buffer')
     let g:ucw_ignore_dup_buffer = 1
 endif
@@ -37,6 +40,9 @@ endif
 if !exists('g:ucw_no_default_autocmd')
     let g:ucw_no_default_autocmd = 0
 endif
+if !exists('g:ucw_no_default_history_keymappings')
+    let g:ucw_no_default_history_keymappings = 0
+endif
 
 
 if !g:ucw_no_default_commands
@@ -44,6 +50,11 @@ if !g:ucw_no_default_commands
     \   -bar
     \   UcwRestoreWindow
     \   call ucw#restore_window(-1)
+
+    command!
+    \   -bar
+    \   UcwOpenHistoryBuffer
+    \   call ucw#open_history_buffer()
 endif
 
 if !g:ucw_no_default_keymappings
