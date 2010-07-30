@@ -111,7 +111,7 @@ function! s:ucw.add_history(type, bufnr) dict "{{{
     if g:ucw_ignore_special_buffer && &l:buftype != ''
         return
     endif
-    if !g:ucw_ignore_dup_buffer || g:ucw_ignore_dup_buffer && !self.has_buffer(a:bufnr)
+    if !g:ucw_ignore_dup_buffer || g:ucw_ignore_dup_buffer && !self.has_same_type_buffer(a:type, a:bufnr)
         call add(self.histories, [a:type, a:bufnr])
     endif
 
@@ -129,9 +129,9 @@ function! s:ucw.is_valid_type(type) "{{{
     \   || a:type ==# 'tab'
 endfunction "}}}
 
-function! s:ucw.has_buffer(bufnr) dict "{{{
-    for bufnr in map(copy(self.histories), 'v:val[s:HISTORY_BUFNR]')
-        if bufnr ==# a:bufnr
+function! s:ucw.has_same_type_buffer(type, bufnr) dict "{{{
+    for [type, bufnr] in self.histories
+        if type ==# a:type && bufnr ==# a:bufnr
             return 1
         endif
     endfor
