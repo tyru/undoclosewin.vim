@@ -145,10 +145,10 @@ function! s:ucw.restore_window(n) dict "{{{
         return
     endif
 
-    if !has_key(g:ucw_restore_commands, type)
+    if !has_key(g:ucw_restore_open_commands, type)
         return
     endif
-    execute g:ucw_restore_commands[type]
+    execute g:ucw_restore_open_commands[type]
 
     " Ignore own BufWinLeave event.
     set eventignore=BufWinLeave
